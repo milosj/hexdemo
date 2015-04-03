@@ -17,6 +17,7 @@
 		E64D2AC31ACE157A003D1EDC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E64D2AC11ACE157A003D1EDC /* LaunchScreen.xib */; };
 		E64D2ACF1ACE157A003D1EDC /* spritedemo1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E64D2ACE1ACE157A003D1EDC /* spritedemo1Tests.m */; };
 		E64D2ADA1ACE169B003D1EDC /* HexNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E64D2AD91ACE169B003D1EDC /* HexNode.m */; };
+		E6F77F981ACEBDE500AA6971 /* Map.m in Sources */ = {isa = PBXBuildFile; fileRef = E6F77F971ACEBDE500AA6971 /* Map.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,8 @@
 		E64D2ACE1ACE157A003D1EDC /* spritedemo1Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = spritedemo1Tests.m; sourceTree = "<group>"; };
 		E64D2AD81ACE169B003D1EDC /* HexNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HexNode.h; sourceTree = "<group>"; };
 		E64D2AD91ACE169B003D1EDC /* HexNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HexNode.m; sourceTree = "<group>"; };
+		E6F77F961ACEBDE500AA6971 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Map.h; sourceTree = "<group>"; };
+		E6F77F971ACEBDE500AA6971 /* Map.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Map.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +96,8 @@
 				E64D2AB21ACE157A003D1EDC /* AppDelegate.m */,
 				E64D2AB41ACE157A003D1EDC /* GameScene.h */,
 				E64D2AB51ACE157A003D1EDC /* GameScene.m */,
+				E6F77F961ACEBDE500AA6971 /* Map.h */,
+				E6F77F971ACEBDE500AA6971 /* Map.m */,
 				E64D2AD81ACE169B003D1EDC /* HexNode.h */,
 				E64D2AD91ACE169B003D1EDC /* HexNode.m */,
 				E64D2AB71ACE157A003D1EDC /* GameScene.sks */,
@@ -233,6 +238,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6F77F981ACEBDE500AA6971 /* Map.m in Sources */,
 				E64D2ABB1ACE157A003D1EDC /* GameViewController.m in Sources */,
 				E64D2AB31ACE157A003D1EDC /* AppDelegate.m in Sources */,
 				E64D2AB61ACE157A003D1EDC /* GameScene.m in Sources */,
@@ -430,6 +436,7 @@
 				E64D2AD41ACE157A003D1EDC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E64D2AD51ACE157A003D1EDC /* Build configuration list for PBXNativeTarget "spritedemo1Tests" */ = {
 			isa = XCConfigurationList;
@@ -438,6 +445,7 @@
 				E64D2AD71ACE157A003D1EDC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

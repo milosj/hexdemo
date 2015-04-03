@@ -8,6 +8,7 @@
 
 #import "GameScene.h"
 #import "HexNode.h"
+#import "Map.h"
 
 @import CoreGraphics;
 
@@ -35,6 +36,7 @@
             HexNode* hex = [HexNode new];
             hex.name = @"HEX";
             hex.position = [self coordinatesForGamePositionX:x andY:y];
+    hex.gamePosition = CGPointMake(5, 5);
             if (y % 2 == 0) {
                 hex.hexShapeNode.fillColor = [SKColor redColor];
             }
@@ -42,6 +44,8 @@
             
 //        }
 //    }
+    
+    self.map = [Map new];
     
     self.selectionHex = [HexNode new];
     self.selectionHex.hexShapeNode.fillColor = [SKColor clearColor];
@@ -97,16 +101,37 @@
         self.target = location;
         UIBezierPath* bezierPath = [UIBezierPath bezierPath];
         self.arrow.position = CGPointMake(0, 0);
+
         CGRect frame = [self.selectedNode calculateAccumulatedFrame];
-        CGPoint startPoint = CGPointMake(self.selectedNode.position.x+frame.size.width/2, self.selectedNode.position.y+frame.size.height/2);
-        [bezierPath moveToPoint:startPoint];
+
         CGPoint gpos = [self gamePositionForCoordinates:location];
+        NSArray* path = [self.map pathFromHex:self.selectedNode.gamePosition toHex:gpos];
+        NSLog(@"%@", path);
+        int i=0;
+        for (NSValue* hex in path) {
+            CGPoint wposition = [self coordinatesForGamePositionX:[hex CGPointValue].x andY:[hex CGPointValue].y];
+            CGPoint adjposition = CGPointMake(wposition.x + frame.size.width/2, wposition.y+frame.size.height/2);
+            if (i == 0) {
+                [bezierPath moveToPoint:adjposition];
+            } else {
+                [bezierPath addLineToPoint:adjposition];
+            }
+            i++;
+        }
+//        [bezierPath addLineToPoint:location];
+        
+//        CGPoint startPoint = CGPointMake(self.selectedNode.position.x+frame.size.width/2, self.selectedNode.position.y+frame.size.height/2);
+//        [bezierPath moveToPoint:startPoint];
+//        
         CGPoint wpos = [self coordinatesForGamePositionX:gpos.x andY:gpos.y];
-        [bezierPath addLineToPoint:location];
-        NSLog(@"(%f,%f)->(%f,%f)->(%f,%f) (%f,%f)", location.x, location.y, gpos.x, gpos.y, wpos.x, wpos.y, self.selectedNode.position.x,self.selectedNode.position.y);
+//        [bezierPath addLineToPoint:location];
+
         self.arrow.path = [bezierPath CGPath];
         
-        self.selectionHex.position = wpos;
+        if ([self.map hex:gpos isAdjacentToHex:self.selectedNode.gamePosition]) {
+            self.selectionHex.position = wpos;
+        }
+
         self.selectionHex.hidden = NO;
 
     }

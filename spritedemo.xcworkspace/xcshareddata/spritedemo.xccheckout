@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1ACDBE10-BFEC-4088-8346-88D696633007</string>
+	<key>IDESourceControlProjectName</key>
+	<string>spritedemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>48E278160A3475540A56C9D5FA48022CDAE05BE4</key>
+		<string>https://github.com/milosj/hexdemo.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>spritedemo.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>48E278160A3475540A56C9D5FA48022CDAE05BE4</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/milosj/hexdemo.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>48E278160A3475540A56C9D5FA48022CDAE05BE4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>48E278160A3475540A56C9D5FA48022CDAE05BE4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>untitled%20folder</string>
+		</dict>
+	</array>
+</dict>
+</plist>

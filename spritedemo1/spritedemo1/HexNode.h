@@ -16,5 +16,6 @@
 
 @property (strong, nonatomic) SKShapeNode* hexShapeNode;
 @property (readonly, nonatomic) CGPoint center;
+@property (assign, nonatomic) CGPoint gamePosition;
 
 @end
