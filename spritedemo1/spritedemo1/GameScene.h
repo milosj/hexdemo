@@ -8,15 +8,20 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@class HexNode, Map;
+@class HexNode, Map, ArrowNode;
 
 @interface GameScene : SKScene
 
 @property (strong, nonatomic) SKNode* rootNode;
 @property (strong, nonatomic) HexNode* selectedNode;
 @property (assign, nonatomic) CGPoint target;
-@property (strong, nonatomic) SKShapeNode* arrow;
+@property (strong, nonatomic) ArrowNode* arrow;
 @property (strong, nonatomic) HexNode* selectionHex;
 
 @property (strong, nonatomic) Map* map;
+
+
++ (CGPoint)gamePositionForCoordinates:(CGPoint)coordinates;
++ (CGPoint)coordinatesForGamePositionX:(int)x andY:(int)y;
+
 @end

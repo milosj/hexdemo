@@ -9,6 +9,9 @@
 #import "GameScene.h"
 #import "HexNode.h"
 #import "Map.h"
+#import "UIBezierPath+Interpolation.h"
+#import "ArrowNode.h"
+
 
 @import CoreGraphics;
 
@@ -22,21 +25,36 @@
     self.rootNode.position = CGPointMake(0, 0);
     [self addChild:self.rootNode];
 
-    self.arrow = [SKShapeNode node];
+//    SKLabelNode* label = [SKLabelNode labelNodeWithText:@"test"];
+//    label.fontColor = [SKColor whiteColor];
+//    label.fontSize = 25;
+//    label.fontName = @"HelveticaNeue";
+//    label.position = CGPointMake(CGRectGetMidX(self.frame),
+//                                 1.85*CGRectGetMidY(self.frame));
+//    [self.rootNode addChild:label];
+    UILabel* newLabel = [UILabel new];
+    newLabel.frame = CGRectMake(10, 0, self.frame.size.width, 100);
+    newLabel.numberOfLines = 0;
+    newLabel.text = @"test";
+    newLabel.textColor = [UIColor whiteColor];
+    newLabel.font = [UIFont boldSystemFontOfSize:20];
+    [self.view addSubview:newLabel];
+    
+    
+    self.arrow = [ArrowNode node];
     self.arrow.position = self.rootNode.position;
-    self.arrow.lineWidth = 5.0;
-    self.arrow.lineCap = kCGLineCapButt;
-    self.arrow.strokeColor = [SKColor redColor];
+    self.arrow.label = newLabel;
+    
     [self addChild:self.arrow];
     
 //    for (int x = 0; x < 20; x++) {
 //        for (int y = 0; y < 20; y++) {
-    int x = 5;
-    int y = 5;
+    int x = 6;
+    int y = 6;
             HexNode* hex = [HexNode new];
             hex.name = @"HEX";
-            hex.position = [self coordinatesForGamePositionX:x andY:y];
-    hex.gamePosition = CGPointMake(5, 5);
+            hex.position = [GameScene coordinatesForGamePositionX:x andY:y];
+    hex.gamePosition = CGPointMake(x, y);
             if (y % 2 == 0) {
                 hex.hexShapeNode.fillColor = [SKColor redColor];
             }
@@ -44,7 +62,7 @@
             
 //        }
 //    }
-    
+    self.selectedNode = hex;
     self.map = [Map new];
     
     self.selectionHex = [HexNode new];
@@ -54,7 +72,7 @@
     [self.rootNode addChild:self.selectionHex];
 }
 
-- (CGPoint)coordinatesForGamePositionX:(int)x andY:(int)y {
++ (CGPoint)coordinatesForGamePositionX:(int)x andY:(int)y {
     if ((y % 2) == 0) {
         return CGPointMake(x*HEX_W, 0.75*y*HEX_H);
     } else {
@@ -62,7 +80,7 @@
     }
 }
 
-- (CGPoint)gamePositionForCoordinates:(CGPoint)coordinates {
++ (CGPoint)gamePositionForCoordinates:(CGPoint)coordinates {
     CGPoint pos1 = CGPointMake((int)(coordinates.x/HEX_W), (int)(coordinates.y/(0.75*HEX_H)));
     if (((int)pos1.y) % 2 == 0) {
         return pos1;
@@ -83,7 +101,7 @@
         if (![node isKindOfClass:[HexNode class]]) {
             node = [node parent];
         }
-        self.selectedNode = node;
+//        self.selectedNode = node;
     }
     self.target = location;
 //        SKAction *action = [SKAction rotateByAngle:M_PI duration:1];
@@ -99,38 +117,30 @@
         CGPoint location = [touch locationInNode:self];
         
         self.target = location;
-        UIBezierPath* bezierPath = [UIBezierPath bezierPath];
+//        UIBezierPath* bezierPath = [UIBezierPath bezierPath];
         self.arrow.position = CGPointMake(0, 0);
 
-        CGRect frame = [self.selectedNode calculateAccumulatedFrame];
+//        CGRect frame = [self.selectedNode calculateAccumulatedFrame];
 
-        CGPoint gpos = [self gamePositionForCoordinates:location];
+        CGPoint gpos = [GameScene gamePositionForCoordinates:location];
         NSArray* path = [self.map pathFromHex:self.selectedNode.gamePosition toHex:gpos];
-        NSLog(@"%@", path);
-        int i=0;
-        for (NSValue* hex in path) {
-            CGPoint wposition = [self coordinatesForGamePositionX:[hex CGPointValue].x andY:[hex CGPointValue].y];
-            CGPoint adjposition = CGPointMake(wposition.x + frame.size.width/2, wposition.y+frame.size.height/2);
-            if (i == 0) {
-                [bezierPath moveToPoint:adjposition];
-            } else {
-                [bezierPath addLineToPoint:adjposition];
-            }
-            i++;
+        if (path.count > 1) {
+            NSMutableArray* npath = [path mutableCopy];
+            [npath removeLastObject];
+            [npath addObject:[NSValue valueWithCGPoint:location]];
+            [self.arrow setArrowPath:npath];
         }
-//        [bezierPath addLineToPoint:location];
-        
-//        CGPoint startPoint = CGPointMake(self.selectedNode.position.x+frame.size.width/2, self.selectedNode.position.y+frame.size.height/2);
-//        [bezierPath moveToPoint:startPoint];
-//        
-        CGPoint wpos = [self coordinatesForGamePositionX:gpos.x andY:gpos.y];
-//        [bezierPath addLineToPoint:location];
 
-        self.arrow.path = [bezierPath CGPath];
         
-        if ([self.map hex:gpos isAdjacentToHex:self.selectedNode.gamePosition]) {
+        //        self.arrow.path = [[UIBezierPath interpolateCGPointsWithCatmullRom:points closed:NO alpha:0.73f] CGPath];
+        
+        CGPoint wpos = [GameScene coordinatesForGamePositionX:gpos.x andY:gpos.y];
+
+        //self.arrow.path = [bezierPath CGPath];
+        
+//        if ([self.map hex:gpos isAdjacentToHex:self.selectedNode.gamePosition]) {
             self.selectionHex.position = wpos;
-        }
+//        }
 
         self.selectionHex.hidden = NO;
 
@@ -147,8 +157,8 @@
 
     
 
-    self.arrow.path = NULL;
-    self.selectedNode = nil;
+//    self.arrow.path = NULL;
+//    self.selectedNode = nil;
 }
 
 

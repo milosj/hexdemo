@@ -87,6 +87,10 @@
     if (depth == 0) {
         return nil;
     }
+    if (CGPointEqualToPoint(startingHex, targetHex)) {
+        return @[[NSValue valueWithCGPoint:startingHex]];
+    }
+    
     if ([self hex:startingHex isAdjacentToHex:targetHex]) {
         return @[[NSValue valueWithCGPoint:startingHex], [NSValue valueWithCGPoint:targetHex]];
     }
