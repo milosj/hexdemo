@@ -72,6 +72,15 @@
     [self.rootNode addChild:self.selectionHex];
 }
 
++ (CGPoint)hexCenterCoordinateForGamePosition:(CGPoint)position {
+    CGPoint wpos = [self coordinatesForGamePosition:position];
+    return CGPointMake(wpos.x+HEX_W/2, wpos.y+0.75*HEX_H/2);
+}
+
++ (CGPoint)coordinatesForGamePosition:(CGPoint)position {
+    return [self coordinatesForGamePositionX:(int)position.x andY:(int)position.y];
+}
+
 + (CGPoint)coordinatesForGamePositionX:(int)x andY:(int)y {
     if ((y % 2) == 0) {
         return CGPointMake(x*HEX_W, 0.75*y*HEX_H);
@@ -125,11 +134,21 @@
         CGPoint gpos = [GameScene gamePositionForCoordinates:location];
         NSArray* path = [self.map pathFromHex:self.selectedNode.gamePosition toHex:gpos];
         if (path.count > 1) {
-            NSMutableArray* npath = [path mutableCopy];
-            [npath removeLastObject];
-            [npath addObject:[NSValue valueWithCGPoint:location]];
-            [self.arrow setArrowPath:npath];
+            NSMutableArray* wpath = [NSMutableArray new];
+            for (NSValue* gamepoint in path) {
+                CGPoint worldpoint = [GameScene hexCenterCoordinateForGamePosition:[gamepoint CGPointValue]];
+                [wpath addObject:[NSValue valueWithCGPoint:worldpoint]];
+            }
+            [self.arrow setArrowPath:wpath];
+            
         }
+        
+//        if (path.count > 1) {
+//            NSMutableArray* npath = [path mutableCopy];
+//            [npath removeLastObject];
+//            [npath addObject:[NSValue valueWithCGPoint:location]];
+//            [self.arrow setArrowPath:npath];
+//        }
 
         
         //        self.arrow.path = [[UIBezierPath interpolateCGPointsWithCatmullRom:points closed:NO alpha:0.73f] CGPath];

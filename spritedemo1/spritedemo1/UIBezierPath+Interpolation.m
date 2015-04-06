@@ -66,7 +66,7 @@ NSArray *pointsFromBezierPath(UIBezierPath *bpath);
     if ([pointsAsNSValues count] < 2)
         return nil;
 
-    int nCurves = (closed ? [pointsAsNSValues count] : [pointsAsNSValues count]-1);
+    int nCurves = (closed ? (int)[pointsAsNSValues count] : (int)[pointsAsNSValues count]-1);
     
     UIBezierPath *path = [UIBezierPath bezierPath];
     for (int ii=0; ii < nCurves; ++ii) {
@@ -78,7 +78,7 @@ NSArray *pointsFromBezierPath(UIBezierPath *bpath);
             [path moveToPoint:curPt];
         
         int nextii = (ii+1)%[pointsAsNSValues count];
-        int previi = (ii-1 < 0 ? [pointsAsNSValues count]-1 : ii-1);
+        int previi = (ii-1 < 0 ? (int)[pointsAsNSValues count]-1 : ii-1);
         
         [pointsAsNSValues[previi] getValue:&prevPt];
         [pointsAsNSValues[nextii] getValue:&nextPt];
@@ -119,6 +119,7 @@ NSArray *pointsFromBezierPath(UIBezierPath *bpath);
         ctrlPt2.x = curPt.x - mx / 3.0;
         ctrlPt2.y = curPt.y - my / 3.0;
         
+
         [path addCurveToPoint:endPt controlPoint1:ctrlPt1 controlPoint2:ctrlPt2];
     }
     

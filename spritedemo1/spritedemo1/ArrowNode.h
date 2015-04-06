@@ -17,6 +17,7 @@
 
 @property (assign, nonatomic) CGFloat thickness;
 @property (assign, nonatomic) CGFloat arrowheadScale;
+@property (assign, nonatomic) CGFloat minThicknessScale;
 
 - (void)setArrowPath:(NSArray*)path;
 
