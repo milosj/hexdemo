@@ -12,12 +12,9 @@
 
 @interface ArrowNode : SKShapeNode
 
-
-@property (strong, nonatomic) UILabel* label;
-
-@property (assign, nonatomic) CGFloat thickness;
-@property (assign, nonatomic) CGFloat arrowheadScale;
-@property (assign, nonatomic) CGFloat minThicknessScale;
+@property (assign, nonatomic) CGFloat thickness;    //final thickness of the arrow stem
+@property (assign, nonatomic) CGFloat arrowheadScale; //width of the arrowhead scaled from thickness
+@property (assign, nonatomic) CGFloat minThicknessScale; //starting thickness of the arrow, scaled from thickness
 
 - (void)setArrowPath:(NSArray*)path;
 

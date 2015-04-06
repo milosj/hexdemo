@@ -9,9 +9,9 @@
 #import "GameScene.h"
 #import "HexNode.h"
 #import "Map.h"
-#import "UIBezierPath+Interpolation.h"
 #import "ArrowNode.h"
 
+#define ARROW_FREQ 10
 
 @import CoreGraphics;
 
@@ -20,6 +20,8 @@
 -(void)didMoveToView:(SKView *)view {
     /* Setup your scene here */
     
+    self.target = CGPointZero;
+    self.arrowPath = [NSMutableArray new];
     
     self.rootNode = [SKNode node];
     self.rootNode.position = CGPointMake(0, 0);
@@ -43,7 +45,7 @@
     
     self.arrow = [ArrowNode node];
     self.arrow.position = self.rootNode.position;
-    self.arrow.label = newLabel;
+
     
     [self addChild:self.arrow];
     
@@ -102,6 +104,8 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
     
+    [self.arrowPath removeAllObjects];
+    
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInNode:self];
     
@@ -125,41 +129,47 @@
         UITouch *touch = [touches anyObject];
         CGPoint location = [touch locationInNode:self];
         
+//        BOOL shouldTrackPoint = YES;
+//        NSValue* lastPointV = [self.arrowPath lastObject];
+//        
+//        if (lastPointV) {
+//            shouldTrackPoint = NO;
+//            CGPoint lastPoint = [lastPointV CGPointValue];
+//            CGFloat delta = sqrtf(powf(location.x-lastPoint.x, 2)+powf(location.y-lastPoint.y, 2));
+//            if (delta > ARROW_FREQ) {
+//                shouldTrackPoint = YES;
+//            }
+//        }
+//        if (shouldTrackPoint) {
+//            [self.arrowPath addObject:[NSValue valueWithCGPoint:location]];
+//        }
+        
         self.target = location;
-//        UIBezierPath* bezierPath = [UIBezierPath bezierPath];
         self.arrow.position = CGPointMake(0, 0);
-
-//        CGRect frame = [self.selectedNode calculateAccumulatedFrame];
 
         CGPoint gpos = [GameScene gamePositionForCoordinates:location];
         NSArray* path = [self.map pathFromHex:self.selectedNode.gamePosition toHex:gpos];
+        
+        
+//        NSArray* path = self.arrowPath;
+        
         if (path.count > 1) {
+//            [self.arrow setArrowPath:path];
             NSMutableArray* wpath = [NSMutableArray new];
             for (NSValue* gamepoint in path) {
-                CGPoint worldpoint = [GameScene hexCenterCoordinateForGamePosition:[gamepoint CGPointValue]];
-                [wpath addObject:[NSValue valueWithCGPoint:worldpoint]];
+                if (gamepoint != path.lastObject) {
+                    CGPoint worldpoint = [GameScene hexCenterCoordinateForGamePosition:[gamepoint CGPointValue]];
+                    [wpath addObject:[NSValue valueWithCGPoint:worldpoint]];
+                }
             }
+            [wpath addObject:[NSValue valueWithCGPoint:location]];
             [self.arrow setArrowPath:wpath];
             
         }
         
-//        if (path.count > 1) {
-//            NSMutableArray* npath = [path mutableCopy];
-//            [npath removeLastObject];
-//            [npath addObject:[NSValue valueWithCGPoint:location]];
-//            [self.arrow setArrowPath:npath];
-//        }
-
-        
-        //        self.arrow.path = [[UIBezierPath interpolateCGPointsWithCatmullRom:points closed:NO alpha:0.73f] CGPath];
-        
         CGPoint wpos = [GameScene coordinatesForGamePositionX:gpos.x andY:gpos.y];
 
-        //self.arrow.path = [bezierPath CGPath];
-        
-//        if ([self.map hex:gpos isAdjacentToHex:self.selectedNode.gamePosition]) {
-            self.selectionHex.position = wpos;
-//        }
+        self.selectionHex.position = wpos;
 
         self.selectionHex.hidden = NO;
 

@@ -18,8 +18,6 @@
 		E64D2ACF1ACE157A003D1EDC /* spritedemo1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E64D2ACE1ACE157A003D1EDC /* spritedemo1Tests.m */; };
 		E64D2ADA1ACE169B003D1EDC /* HexNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E64D2AD91ACE169B003D1EDC /* HexNode.m */; };
 		E6F77F981ACEBDE500AA6971 /* Map.m in Sources */ = {isa = PBXBuildFile; fileRef = E6F77F971ACEBDE500AA6971 /* Map.m */; };
-		E6F77F9D1ACEDB0E00AA6971 /* CGPointExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = E6F77F9A1ACEDB0E00AA6971 /* CGPointExtension.m */; };
-		E6F77F9E1ACEDB0E00AA6971 /* UIBezierPath+Interpolation.m in Sources */ = {isa = PBXBuildFile; fileRef = E6F77F9C1ACEDB0E00AA6971 /* UIBezierPath+Interpolation.m */; };
 		E6F77FA11ACEDE2400AA6971 /* ArrowNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E6F77FA01ACEDE2400AA6971 /* ArrowNode.m */; };
 /* End PBXBuildFile section */
 
@@ -54,10 +52,6 @@
 		E64D2AD91ACE169B003D1EDC /* HexNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HexNode.m; sourceTree = "<group>"; };
 		E6F77F961ACEBDE500AA6971 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Map.h; sourceTree = "<group>"; };
 		E6F77F971ACEBDE500AA6971 /* Map.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Map.m; sourceTree = "<group>"; };
-		E6F77F991ACEDB0E00AA6971 /* CGPointExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGPointExtension.h; sourceTree = "<group>"; };
-		E6F77F9A1ACEDB0E00AA6971 /* CGPointExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGPointExtension.m; sourceTree = "<group>"; };
-		E6F77F9B1ACEDB0E00AA6971 /* UIBezierPath+Interpolation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Interpolation.h"; sourceTree = "<group>"; };
-		E6F77F9C1ACEDB0E00AA6971 /* UIBezierPath+Interpolation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Interpolation.m"; sourceTree = "<group>"; };
 		E6F77F9F1ACEDE2400AA6971 /* ArrowNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrowNode.h; sourceTree = "<group>"; };
 		E6F77FA01ACEDE2400AA6971 /* ArrowNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrowNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,10 +105,6 @@
 				E6F77F971ACEBDE500AA6971 /* Map.m */,
 				E64D2AD81ACE169B003D1EDC /* HexNode.h */,
 				E64D2AD91ACE169B003D1EDC /* HexNode.m */,
-				E6F77F991ACEDB0E00AA6971 /* CGPointExtension.h */,
-				E6F77F9A1ACEDB0E00AA6971 /* CGPointExtension.m */,
-				E6F77F9B1ACEDB0E00AA6971 /* UIBezierPath+Interpolation.h */,
-				E6F77F9C1ACEDB0E00AA6971 /* UIBezierPath+Interpolation.m */,
 				E64D2AB71ACE157A003D1EDC /* GameScene.sks */,
 				E64D2AB91ACE157A003D1EDC /* GameViewController.h */,
 				E64D2ABA1ACE157A003D1EDC /* GameViewController.m */,
@@ -261,8 +251,6 @@
 				E64D2ADA1ACE169B003D1EDC /* HexNode.m in Sources */,
 				E6F77FA11ACEDE2400AA6971 /* ArrowNode.m in Sources */,
 				E64D2AB01ACE157A003D1EDC /* main.m in Sources */,
-				E6F77F9E1ACEDB0E00AA6971 /* UIBezierPath+Interpolation.m in Sources */,
-				E6F77F9D1ACEDB0E00AA6971 /* CGPointExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
