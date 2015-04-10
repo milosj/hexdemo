@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E647B2691AD33FF7000C3805 /* TerrainShapeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E647B2681AD33FF7000C3805 /* TerrainShapeNode.m */; };
+		E647B26B1AD34670000C3805 /* textures.atlas in Resources */ = {isa = PBXBuildFile; fileRef = E647B26A1AD34670000C3805 /* textures.atlas */; };
 		E64D2AB01ACE157A003D1EDC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E64D2AAF1ACE157A003D1EDC /* main.m */; };
 		E64D2AB31ACE157A003D1EDC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E64D2AB21ACE157A003D1EDC /* AppDelegate.m */; };
 		E64D2AB61ACE157A003D1EDC /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E64D2AB51ACE157A003D1EDC /* GameScene.m */; };
@@ -32,6 +34,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E647B2671AD33FF7000C3805 /* TerrainShapeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerrainShapeNode.h; sourceTree = "<group>"; };
+		E647B2681AD33FF7000C3805 /* TerrainShapeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TerrainShapeNode.m; sourceTree = "<group>"; };
+		E647B26A1AD34670000C3805 /* textures.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = textures.atlas; path = spritedemo1/textures.atlas; sourceTree = "<group>"; };
 		E64D2AAA1ACE157A003D1EDC /* spritedemo1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = spritedemo1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E64D2AAE1ACE157A003D1EDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E64D2AAF1ACE157A003D1EDC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -77,6 +82,7 @@
 		E64D2AA11ACE157A003D1EDC = {
 			isa = PBXGroup;
 			children = (
+				E647B26A1AD34670000C3805 /* textures.atlas */,
 				E64D2AAC1ACE157A003D1EDC /* spritedemo1 */,
 				E64D2ACB1ACE157A003D1EDC /* spritedemo1Tests */,
 				E64D2AAB1ACE157A003D1EDC /* Products */,
@@ -112,6 +118,8 @@
 				E64D2ABF1ACE157A003D1EDC /* Images.xcassets */,
 				E64D2AC11ACE157A003D1EDC /* LaunchScreen.xib */,
 				E64D2AAD1ACE157A003D1EDC /* Supporting Files */,
+				E647B2671AD33FF7000C3805 /* TerrainShapeNode.h */,
+				E647B2681AD33FF7000C3805 /* TerrainShapeNode.m */,
 			);
 			path = spritedemo1;
 			sourceTree = "<group>";
@@ -224,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E64D2AC31ACE157A003D1EDC /* LaunchScreen.xib in Resources */,
+				E647B26B1AD34670000C3805 /* textures.atlas in Resources */,
 				E64D2AC01ACE157A003D1EDC /* Images.xcassets in Resources */,
 				E64D2AB81ACE157A003D1EDC /* GameScene.sks in Resources */,
 				E64D2ABE1ACE157A003D1EDC /* Main.storyboard in Resources */,
@@ -245,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6F77F981ACEBDE500AA6971 /* Map.m in Sources */,
+				E647B2691AD33FF7000C3805 /* TerrainShapeNode.m in Sources */,
 				E64D2ABB1ACE157A003D1EDC /* GameViewController.m in Sources */,
 				E64D2AB31ACE157A003D1EDC /* AppDelegate.m in Sources */,
 				E64D2AB61ACE157A003D1EDC /* GameScene.m in Sources */,

@@ -9,6 +9,7 @@
 #import "GameScene.h"
 #import "HexNode.h"
 #import "Map.h"
+#import "TerrainShapeNode.h"
 #import "ArrowNode.h"
 
 #define ARROW_FREQ 10
@@ -27,13 +28,6 @@
     self.rootNode.position = CGPointMake(0, 0);
     [self addChild:self.rootNode];
 
-//    SKLabelNode* label = [SKLabelNode labelNodeWithText:@"test"];
-//    label.fontColor = [SKColor whiteColor];
-//    label.fontSize = 25;
-//    label.fontName = @"HelveticaNeue";
-//    label.position = CGPointMake(CGRectGetMidX(self.frame),
-//                                 1.85*CGRectGetMidY(self.frame));
-//    [self.rootNode addChild:label];
     UILabel* newLabel = [UILabel new];
     newLabel.frame = CGRectMake(10, 0, self.frame.size.width, 100);
     newLabel.numberOfLines = 0;
@@ -72,6 +66,22 @@
     self.selectionHex.hexShapeNode.strokeColor = [SKColor redColor];
     self.selectionHex.hidden = YES;
     [self.rootNode addChild:self.selectionHex];
+    
+    TerrainShapeNode* terrain = [TerrainShapeNode new];
+    [terrain setupInView:self.view];
+    terrain.position = CGPointMake(400, 200);
+    [self.rootNode addChild:terrain];
+
+    TerrainShapeNode* terrain2 = [TerrainShapeNode new];
+    terrain2.xScale = 0.5f;
+    terrain2.yScale = 0.5f;
+    terrain2.zPosition = 3.0f;
+    [terrain2 setupInView:self.view];
+    terrain2.position = CGPointMake(0, 70);
+    [terrain addChild:terrain2];
+    
+    NSLog(@"%@",self.map);
+    NSArray* vectors = [self.map vectorize];
 }
 
 + (CGPoint)hexCenterCoordinateForGamePosition:(CGPoint)position {
