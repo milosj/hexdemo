@@ -79,19 +79,18 @@
 //    terrain2.position = CGPointMake(0, 70);
 //    [terrain addChild:terrain2];
     
-//    NSLog(@"%@",self.map);
+    NSLog(@"%@",self.map);
     NSArray* vectors = [self.map vectorize];
     int h = 0;
     for (NSArray* heightPaths in vectors) {
         for (UIBezierPath* path in heightPaths) {
-            if (h==1) {
+            if (h>0) {
                 TerrainShapeNode* terrain3 = [TerrainShapeNode new];
                 terrain3.polygon = path;
                 terrain3.height = h;
                 [terrain3 setupInView:self.view];
                 [self.rootNode addChild:terrain3];
                 NSLog(@"added for h=%d path %@", h, path);
-                break;
             }
         }
         h++;
