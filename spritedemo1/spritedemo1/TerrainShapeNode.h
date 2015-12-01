@@ -11,7 +11,7 @@
 @interface TerrainShapeNode : SKNode
 
 @property (assign, nonatomic) int height;
-@property (strong, nonatomic) UIBezierPath* path;
+@property (strong, nonatomic) UIBezierPath* polygon;
 
 - (void)setupInView:(SKView*)view;
 

@@ -22,7 +22,7 @@ static const int MAP_H = 10;
 static const int NO_POINT = -100;
 
 @interface Map(private)
--(float)perlinForX:(int)x andY:(int)y;
+
 @end
 
 @implementation Map
@@ -147,6 +147,9 @@ static const int NO_POINT = -100;
         case e:
             directionDescription = @"e";
             break;
+        case any:
+            directionDescription = @"any";
+            break;
         default:
             break;
     }
@@ -212,6 +215,9 @@ static const int NO_POINT = -100;
 
 - (NSArray*)directionsClockwiseFromDirection:(direction)startingDirection {
     NSMutableArray* directions = [NSMutableArray new];
+    if (startingDirection == any) {
+        startingDirection = nw;
+    }
     [directions addObject:[NSNumber numberWithLong:startingDirection]];
     direction next = [self directionClockwiseFromDirection:startingDirection];
     while (next != startingDirection) {

@@ -25,7 +25,7 @@
     self.arrowPath = [NSMutableArray new];
     
     self.rootNode = [SKNode node];
-    self.rootNode.position = CGPointMake(0, 0);
+    self.rootNode.position = CGPointMake(300, 100);
     [self addChild:self.rootNode];
 
     UILabel* newLabel = [UILabel new];
@@ -67,29 +67,36 @@
     self.selectionHex.hidden = YES;
     [self.rootNode addChild:self.selectionHex];
     
-    TerrainShapeNode* terrain = [TerrainShapeNode new];
-    [terrain setupInView:self.view];
-    terrain.position = CGPointMake(400, 200);
+//    TerrainShapeNode* terrain = [TerrainShapeNode new];
+//    [terrain setupInView:self.view];
 //    [self.rootNode addChild:terrain];
 
-    TerrainShapeNode* terrain2 = [TerrainShapeNode new];
-    terrain2.xScale = 0.5f;
-    terrain2.yScale = 0.5f;
-    terrain2.zPosition = 3.0f;
-    [terrain2 setupInView:self.view];
-    terrain2.position = CGPointMake(0, 70);
+//    TerrainShapeNode* terrain2 = [TerrainShapeNode new];
+//    terrain2.xScale = 0.5f;
+//    terrain2.yScale = 0.5f;
+//    terrain2.zPosition = 3.0f;
+//    [terrain2 setupInView:self.view];
+//    terrain2.position = CGPointMake(0, 70);
 //    [terrain addChild:terrain2];
     
-    NSLog(@"%@",self.map);
+//    NSLog(@"%@",self.map);
     NSArray* vectors = [self.map vectorize];
+    int h = 0;
     for (NSArray* heightPaths in vectors) {
         for (UIBezierPath* path in heightPaths) {
-            TerrainShapeNode* terrain3 = [TerrainShapeNode new];
-            terrain3.path = path;
-            [terrain3 setupInView:self.view];
-            [self.rootNode addChild:terrain3];
+            if (h==1) {
+                TerrainShapeNode* terrain3 = [TerrainShapeNode new];
+                terrain3.polygon = path;
+                terrain3.height = h;
+                [terrain3 setupInView:self.view];
+                [self.rootNode addChild:terrain3];
+                NSLog(@"added for h=%d path %@", h, path);
+                break;
+            }
         }
+        h++;
     }
+    [self.rootNode setScale:0.5f];
 }
 
 + (CGPoint)hexCenterCoordinateForGamePosition:(CGPoint)position {
