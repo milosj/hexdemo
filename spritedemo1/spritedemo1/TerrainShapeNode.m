@@ -35,18 +35,18 @@
     terrainShape.fillColor = [UIColor blackColor];
     terrainShape.strokeColor = [UIColor clearColor];
     
-    UIBezierPath* testpath = [UIBezierPath new];
-    [testpath moveToPoint:CGPointMake(400, 700)];
-    [testpath addLineToPoint:CGPointMake(500, 600)];
-    [testpath addLineToPoint:CGPointMake(600, 500)];
-    [testpath addLineToPoint:CGPointMake(550, 300)];
-    [testpath addLineToPoint:CGPointMake(500, 400)];
-    [testpath addLineToPoint:CGPointMake(250, 350)];
-    [testpath addLineToPoint:CGPointMake(150, 200)];
-    [testpath addLineToPoint:CGPointMake(200, 400)];
-    [testpath addLineToPoint:CGPointMake(300, 600)];
-    [testpath closePath];
-    terrainShape.path = [testpath CGPath];
+//    UIBezierPath* testpath = [UIBezierPath new];
+//    [testpath moveToPoint:CGPointMake(400, 700)];
+//    [testpath addLineToPoint:CGPointMake(500, 600)];
+//    [testpath addLineToPoint:CGPointMake(600, 500)];
+//    [testpath addLineToPoint:CGPointMake(550, 300)];
+//    [testpath addLineToPoint:CGPointMake(500, 400)];
+//    [testpath addLineToPoint:CGPointMake(250, 350)];
+//    [testpath addLineToPoint:CGPointMake(150, 200)];
+//    [testpath addLineToPoint:CGPointMake(200, 400)];
+//    [testpath addLineToPoint:CGPointMake(300, 600)];
+//    [testpath closePath];
+//    terrainShape.path = [testpath CGPath];
     
     SKTexture* mask = [view textureFromNode:terrainShape];
     
@@ -70,7 +70,7 @@
     outline.name = @"outline";
     outline.fillColor = [SKColor clearColor];
     outline.strokeColor = [SKColor whiteColor];
-    outline.path = [testpath CGPath];
+    outline.path = [self.path CGPath];
     outline.position = CGPointMake(maskNode.frame.origin.x,maskNode.frame.origin.y);
     outline.zPosition = self.zPosition;
     [self addChild:outline];

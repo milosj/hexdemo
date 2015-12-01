@@ -70,7 +70,7 @@
     TerrainShapeNode* terrain = [TerrainShapeNode new];
     [terrain setupInView:self.view];
     terrain.position = CGPointMake(400, 200);
-    [self.rootNode addChild:terrain];
+//    [self.rootNode addChild:terrain];
 
     TerrainShapeNode* terrain2 = [TerrainShapeNode new];
     terrain2.xScale = 0.5f;
@@ -78,10 +78,18 @@
     terrain2.zPosition = 3.0f;
     [terrain2 setupInView:self.view];
     terrain2.position = CGPointMake(0, 70);
-    [terrain addChild:terrain2];
+//    [terrain addChild:terrain2];
     
     NSLog(@"%@",self.map);
     NSArray* vectors = [self.map vectorize];
+    for (NSArray* heightPaths in vectors) {
+        for (UIBezierPath* path in heightPaths) {
+            TerrainShapeNode* terrain3 = [TerrainShapeNode new];
+            terrain3.path = path;
+            [terrain3 setupInView:self.view];
+            [self.rootNode addChild:terrain3];
+        }
+    }
 }
 
 + (CGPoint)hexCenterCoordinateForGamePosition:(CGPoint)position {

@@ -126,6 +126,33 @@ static const int NO_POINT = -100;
     return total;
 }
 
+- (NSString*)stringForDirection:(direction)d {
+    NSString* directionDescription;
+    switch (d) {
+        case ne:
+            directionDescription = @"ne";
+            break;
+        case nw:
+            directionDescription = @"nw";
+            break;
+        case w:
+            directionDescription = @"w";
+            break;
+        case sw:
+            directionDescription = @"sw";
+            break;
+        case se:
+            directionDescription = @"se";
+            break;
+        case e:
+            directionDescription = @"e";
+            break;
+        default:
+            break;
+    }
+    return directionDescription;
+}
+
 - (BOOL)direction:(direction)a isOppositeOf:(direction)b {
     if (a == any || b == any) {
         return NO;
@@ -185,10 +212,10 @@ static const int NO_POINT = -100;
 
 - (NSArray*)directionsClockwiseFromDirection:(direction)startingDirection {
     NSMutableArray* directions = [NSMutableArray new];
-    [directions addObject:[NSNumber numberWithInt:startingDirection]];
+    [directions addObject:[NSNumber numberWithLong:startingDirection]];
     direction next = [self directionClockwiseFromDirection:startingDirection];
     while (next != startingDirection) {
-        [directions addObject:[NSNumber numberWithInt:next]];
+        [directions addObject:[NSNumber numberWithLong:next]];
         next = [self directionClockwiseFromDirection:next];
     }
     return directions;
@@ -368,6 +395,7 @@ static const int NO_POINT = -100;
 //}
 
 - (NSArray*)vectorize {
+    //keep track of finished hexes
     NSMutableArray* doneRows = [NSMutableArray arrayWithCapacity:MAP_H];
     for (int y=0; y<MAP_H; y++) {
         NSMutableArray* doneRow = [NSMutableArray arrayWithCapacity:MAP_W];
@@ -377,16 +405,22 @@ static const int NO_POINT = -100;
         [doneRows addObject:doneRow];
     }
 
+    //track paths for each height level
     NSMutableArray* pathsForHeight = [NSMutableArray array];
     for (int i=0; i<4; i++) {
         [pathsForHeight addObject:[NSMutableArray new]];
     }
     
+    CGPoint (^pointForPath)(CGPoint) = ^CGPoint(CGPoint originalPoint) {
+        return CGPointMake(originalPoint.x*100, originalPoint.y*100);
+    };
+    
+    //calculate largest path from starting point at starting height
     UIBezierPath* (^largestPath)(CGPoint,int) = ^UIBezierPath* (CGPoint startingPoint,int startingHeight){
         UIBezierPath* largest = [UIBezierPath new];
-        [largest moveToPoint:startingPoint];
+        [largest moveToPoint:pointForPath(startingPoint)];
         int nPoints = 0;
-        NSMutableArray* allPoints = [NSMutableArray new];
+        NSMutableArray* allPoints = [NSMutableArray new]; //all points in this path
         [allPoints addObject:[NSValue valueWithCGPoint:startingPoint]];
         int allPointsCursor = 0;
         CGPoint currentPoint = startingPoint;
@@ -394,25 +428,31 @@ static const int NO_POINT = -100;
         direction orientationOfLine = nw;
         BOOL endPointFound = NO; //end point for this polygon
         while (!endPointFound) { //close the poly
-            NSLog(@"point %.0f,%.0f", currentPoint.x, currentPoint.y);
+//            NSLog(@"\n\t CURRENT POINT %.0f,%.0f", currentPoint.x, currentPoint.y);
             BOOL foundNext = NO;
             NSArray* neighbours = [self hexesBorderingHex:currentPoint];
-            NSArray* directions = [self directionsClockwiseFromDirection:orientationOfLine];
+//            NSLog(@"\n\t neighbours %@", neighbours);
+            NSArray* directions = [self directionsClockwiseFromDirection:orientationOfLine]; //get directions of neighbouring hexes sorted clockwise starting with direction of the orientation of line that we're tracing the path in
             for (NSNumber* nextDir in directions) { //clockwise through neighbours
                 direction d = [nextDir intValue];
                 CGPoint neighbourPoint = [neighbours[d] CGPointValue];
                 if (neighbourPoint.x != NO_POINT && neighbourPoint.y != NO_POINT) {
                     NSMutableArray* completedRow = doneRows[(int)neighbourPoint.y];
                     int completedHeight = [completedRow[(int)neighbourPoint.x] intValue];
+//                    NSLog(@"\n\t\t looking in direction %@ at (%f, %f)\n\t\t\t completedHeight:%d, completedRow:%@", [self stringForDirection:d], neighbourPoint.x, neighbourPoint.y, completedHeight, completedRow);
                     if (completedHeight < startingHeight) {
                         int neighbourH = [[self tileAtMapCoordinates:neighbourPoint] intValue];
+//                        NSLog(@"\n\t\t neighbour %f,%f at %d", neighbourPoint.x, neighbourPoint.y, neighbourH);
                         if (neighbourH >= startingHeight) { //if height matches
                             if (CGPointEqualToPoint(startingPoint, neighbourPoint)) { //if looped back to start
-                                [largest addLineToPoint:currentPoint];
-                                [largest addLineToPoint:neighbourPoint];
+//                                NSLog(@"\n\t\t\t !!!Found starting point!!!");
+                                [largest addLineToPoint:pointForPath(currentPoint)];
+                                nPoints++;
+                                [largest addLineToPoint:pointForPath(neighbourPoint)];
+                                nPoints++;
                                 [allPoints addObject:[NSValue valueWithCGPoint:currentPoint]];
                                 [allPoints addObject:[NSValue valueWithCGPoint:neighbourPoint]];
-                                allPointsCursor = allPoints.count-1;
+                                allPointsCursor = ((int)allPoints.count)-1;
                                 endPointFound = YES;
                                 foundNext = YES;
                                 break;
@@ -420,44 +460,55 @@ static const int NO_POINT = -100;
                                 //mark point as done
                                 int x = (int)neighbourPoint.x;
                                 completedRow[x] = [NSNumber numberWithInt:startingHeight];
-
+//                                NSLog(@"\n\t\t\t Marking tile %f,%f complete", neighbourPoint.x, neighbourPoint.y);
                                 
                                 if (currentDirection == d) { //moving in the right direction - keep going
-                                    
+//                                    NSLog(@"\n\t\t\t Keeping direction %@", [self stringForDirection:d]);
                                 } else if (currentDirection == any) { //no direction asigned, use this one
                                     currentDirection = d; //assign direction
                                     orientationOfLine = [self directionCounterClockwiseFromDirection:d];
+//                                    NSLog(@"\n\t\t\t New direction %@, line orientation %@", [self stringForDirection:d], [self stringForDirection:orientationOfLine]);
                                 } else { //line segment ends, change direction and draw
-                                    CGPoint prevPoint = [[allPoints lastObject] CGPointValue];
-                                    NSLog(@"(%.0f,%.0f)->(%.0f,%.0f)", prevPoint.x, prevPoint.y, currentPoint.x, currentPoint.y);
+//                                    CGPoint prevPoint = [[allPoints lastObject] CGPointValue]; //for logging only
+//                                    NSLog(@"\n\t\t\t Adding line (%.0f,%.0f)->(%.0f,%.0f)", prevPoint.x, prevPoint.y, currentPoint.x, currentPoint.y);
                                     
                                     orientationOfLine = [self directionCounterClockwiseFromDirection:d];
                                     currentDirection = d; //change direction
-                                    [largest addLineToPoint:currentPoint];
-                                    [allPoints addObject:[NSValue valueWithCGPoint:currentPoint]];
-                                    allPointsCursor = allPoints.count-1;
+//                                    NSLog(@"\n\t\t\t New direction %@, line orientation %@", [self stringForDirection:d], [self stringForDirection:orientationOfLine]);
+                                    
+                                    [largest addLineToPoint:pointForPath(currentPoint)]; //update path
+                                    [allPoints addObject:[NSValue valueWithCGPoint:currentPoint]]; //keep track of point
+                                    allPointsCursor = ((int)allPoints.count)-1;
                                     nPoints++;
                                 }
                                 foundNext = YES;
                                 currentPoint = neighbourPoint; //check neighbours of this point next
+//                                NSLog(@"\n\t\t\t New current point %f, %f", currentPoint.x, currentPoint.y);
                                 break;
                             }
                         }
                     }
                 }
             }
+//            NSLog(@"\n\t ALL POINTS (%d) %@", allPointsCursor, allPoints);
             if (!foundNext) {
-                CGPoint lastPoint = [allPoints[allPointsCursor--] CGPointValue]; //backtrack
-                CGPoint prevPoint = [[allPoints lastObject] CGPointValue];
-                NSLog(@"BT(%.0f,%.0f)->(%.0f,%.0f)", prevPoint.x, prevPoint.y, lastPoint.x, lastPoint.y);
-                [largest addLineToPoint:currentPoint];
-                [allPoints addObject:[NSValue valueWithCGPoint:currentPoint]];
-                [largest addLineToPoint:lastPoint];
-                [allPoints addObject:[NSValue valueWithCGPoint:lastPoint]];
-                currentPoint = lastPoint;
-                currentDirection = any;
-                orientationOfLine = [self directionOppositeOfDirection:orientationOfLine];
-                nPoints++;
+                CGPoint lastPoint = [allPoints[allPointsCursor] CGPointValue]; //backtrack
+                if (CGPointEqualToPoint(lastPoint, currentPoint)) {
+                    [largest addLineToPoint:pointForPath(currentPoint)];
+                    [allPoints addObject:[NSValue valueWithCGPoint:currentPoint]];
+                    nPoints++;
+                    endPointFound = YES;
+//                    NSLog(@"No previous point, closing");
+                } else {
+//                    NSLog(@"\n\t\t\t BACKTRACKING (%.0f,%.0f)->(%.0f,%.0f)", currentPoint.x, currentPoint.y, lastPoint.x, lastPoint.y);
+                    [largest addLineToPoint:pointForPath(currentPoint)];
+                    allPointsCursor--;
+                    [allPoints addObject:[NSValue valueWithCGPoint:currentPoint]];
+                    currentPoint = lastPoint;
+                    currentDirection = any;
+                    orientationOfLine = [self directionOppositeOfDirection:orientationOfLine];
+                    nPoints++;
+                }
             }
         }
 
@@ -482,6 +533,7 @@ static const int NO_POINT = -100;
         if (nPoints == 0) {
             return nil;
         }
+        NSLog(@"\n\n*************************************\n DONE FOR h=%d %@", startingHeight, allPoints);
         return largest;
     };
     
@@ -500,7 +552,7 @@ static const int NO_POINT = -100;
                 NSMutableArray* paths = pathsForHeight[[h intValue]];
                 BOOL pointContained = NO;
                 for (UIBezierPath* existingPath in paths) { //check that point isn't already covered by a path of same level
-                    if ([existingPath containsPoint:nextPoint]) { //if existing path already covers this point
+                    if ([existingPath containsPoint:pointForPath(nextPoint)]) { //if existing path already covers this point
                         pointContained = YES;
                         [markAsDone addObject:[NSNumber numberWithInt:x]];
                         [markAsDoneValues addObject:[h copy]];
