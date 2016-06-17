@@ -68,6 +68,8 @@ static const int NO_POINT = -100;
     return self;
 }
 
+#pragma mark Map Access
+
 -(id)tileAtMapCoordinates:(CGPoint)coordinates {
     return [self tileAtMapX:coordinates.x andMapY:coordinates.y];
 }
@@ -76,55 +78,7 @@ static const int NO_POINT = -100;
     return [[self.rows objectAtIndex:y] objectAtIndex:x];
 }
 
--(float)noiseForX:(float)x andY:(float)y {
-    int n = x*y+10*x-y;
-    srand(n*log(n));
-    float z = (rand()%100)/100.0f;
-    return z;
-}
-
--(float)smoothNoiseForX:(float)x andY:(float)y {
-    float corners = ( [self noiseForX:x-1 andY:y-1]+[self noiseForX:x+1 andY:y-1]+[self noiseForX:x-1 andY:y+1]+[self noiseForX:x+1 andY:y+1] )/4.0f;
-    float sides   = ( [self noiseForX:x-1 andY:y] +[self noiseForX:x+1 andY: y]  +[self noiseForX:x andY:y-1]  +[self noiseForX:x andY:y+1] )/4.0f;
-    float center  =  [self noiseForX:x andY:y];
-    return 0.15f*corners + 0.35f*sides + 0.5f*center;
-}
-
--(float)interpolateForX:(float)x andY:(float)y andTheta:(float)theta {
-    float ft = theta * M_PI;
-    float f = (1 - cos(ft)) * .5f;
-    return  x*(1-f) + y*f;
-}
-
--(float)interpolateNoiseForX:(float)x andY:(float)y {
-    int integer_X    = round(x);
-    float fractional_X = x - integer_X;
-    
-    int integer_Y    = round(y);
-    float fractional_Y = y - integer_Y;
-    
-    float v1 = [self smoothNoiseForX:integer_X andY:integer_Y];
-    float v2 = [self smoothNoiseForX:integer_X + 1 andY:integer_Y];
-    float v3 = [self smoothNoiseForX:integer_X andY:integer_Y + 1];
-    float v4 = [self smoothNoiseForX:integer_X + 1 andY:integer_Y + 1];
-    
-    float i1 = [self interpolateForX:v1 andY:v2 andTheta:fractional_X];
-    float i2 = [self interpolateForX:v3 andY:v4 andTheta:fractional_X];
-    
-    return [self interpolateForX:i1 andY:i2 andTheta:fractional_Y];
-}
-
--(float)perlinForX:(int)x andY:(int)y {
-    float total = 0;
-    
-    for (int i=1; i<4; i++) {
-        float frequency = pow(2, i);
-        float amplitude = pow(0.5f, i);
-        total += [self interpolateNoiseForX:(x/10.0f)*frequency andY:(y/10.0f)*frequency] * amplitude;
-    }
-    
-    return total;
-}
+#pragma mark Direction handling
 
 - (NSString*)stringForDirection:(direction)d {
     NSString* directionDescription;
@@ -227,6 +181,7 @@ static const int NO_POINT = -100;
     return directions;
 }
 
+#pragma mark Adjacency
 
 - (BOOL)hex:(CGPoint)hex isAdjacentToHex:(CGPoint)otherHex {
     return [self hexWithX:(int)hex.x andY:(int)hex.y isAdjacentToHexWithX:(int)otherHex.x andY:(int)otherHex.y];
@@ -327,6 +282,8 @@ static const int NO_POINT = -100;
     return hexes;
 }
 
+#pragma mark Paths between hexes
+
 - (BOOL)lineFromHex:(CGPoint)startingHex toHex:(CGPoint)middleHex approachesHex:(CGPoint)endHex {
 
     if (startingHex.x > middleHex.x && startingHex.x < endHex.x) {
@@ -399,6 +356,8 @@ static const int NO_POINT = -100;
 ////    NSArray* adjacentTarget = [self hexesBorderingHexWithX:targetX andY:targetY];
 //    
 //}
+
+#pragma mark Asset generation
 
 - (NSArray*)vectorize {
     //keep track of finished hexes
@@ -593,6 +552,8 @@ static const int NO_POINT = -100;
     return pathsForHeight;
 }
 
+#pragma mark debug
+
 - (NSString*)description {
     NSEnumerator* en = [self.rows reverseObjectEnumerator];
     NSArray* row = [en nextObject];
@@ -605,6 +566,58 @@ static const int NO_POINT = -100;
         row = [en nextObject];
     }
     return desc;
+}
+
+#pragma mark Map Generation
+
+-(float)noiseForX:(float)x andY:(float)y {
+    int n = x*y+10*x-y;
+    srand(n*log(n));
+    float z = (rand()%100)/100.0f;
+    return z;
+}
+
+-(float)smoothNoiseForX:(float)x andY:(float)y {
+    float corners = ( [self noiseForX:x-1 andY:y-1]+[self noiseForX:x+1 andY:y-1]+[self noiseForX:x-1 andY:y+1]+[self noiseForX:x+1 andY:y+1] )/4.0f;
+    float sides   = ( [self noiseForX:x-1 andY:y] +[self noiseForX:x+1 andY: y]  +[self noiseForX:x andY:y-1]  +[self noiseForX:x andY:y+1] )/4.0f;
+    float center  =  [self noiseForX:x andY:y];
+    return 0.15f*corners + 0.35f*sides + 0.5f*center;
+}
+
+-(float)interpolateForX:(float)x andY:(float)y andTheta:(float)theta {
+    float ft = theta * M_PI;
+    float f = (1 - cos(ft)) * .5f;
+    return  x*(1-f) + y*f;
+}
+
+-(float)interpolateNoiseForX:(float)x andY:(float)y {
+    int integer_X    = round(x);
+    float fractional_X = x - integer_X;
+    
+    int integer_Y    = round(y);
+    float fractional_Y = y - integer_Y;
+    
+    float v1 = [self smoothNoiseForX:integer_X andY:integer_Y];
+    float v2 = [self smoothNoiseForX:integer_X + 1 andY:integer_Y];
+    float v3 = [self smoothNoiseForX:integer_X andY:integer_Y + 1];
+    float v4 = [self smoothNoiseForX:integer_X + 1 andY:integer_Y + 1];
+    
+    float i1 = [self interpolateForX:v1 andY:v2 andTheta:fractional_X];
+    float i2 = [self interpolateForX:v3 andY:v4 andTheta:fractional_X];
+    
+    return [self interpolateForX:i1 andY:i2 andTheta:fractional_Y];
+}
+
+-(float)perlinForX:(int)x andY:(int)y {
+    float total = 0;
+    
+    for (int i=1; i<4; i++) {
+        float frequency = pow(2, i);
+        float amplitude = pow(0.5f, i);
+        total += [self interpolateNoiseForX:(x/10.0f)*frequency andY:(y/10.0f)*frequency] * amplitude;
+    }
+    
+    return total;
 }
 
 @end
